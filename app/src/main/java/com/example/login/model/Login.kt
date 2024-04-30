@@ -1,6 +1,6 @@
 package com.example.login.model
 
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 
 data class Login(
@@ -8,6 +8,7 @@ data class Login(
     var senha: String = ""
 )
 
+@Composable
 fun rememberLogin(): Login {
     return remember {
         Login()
