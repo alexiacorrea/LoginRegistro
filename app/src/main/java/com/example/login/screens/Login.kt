@@ -4,9 +4,12 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -17,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -79,7 +83,10 @@ fun Login(onLogin: () -> Unit,
             onValueChange = { usuario.value = it },
             label = {
                 Text(text = "Usuário")
-            }
+            },
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
         )
 
         Text(
@@ -94,6 +101,10 @@ fun Login(onLogin: () -> Unit,
             label = {
                 Text(text = "Senha")
             },
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth(),
+
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password
             ),
@@ -117,21 +128,38 @@ fun Login(onLogin: () -> Unit,
                 }
             }
         )
-        Button(onClick = {
-            if (usuario.value == "admin" && senha.value == "admin") {
-                onLogin()
-            } else {
-                context.toast("Usuário ou senha incorreto")
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Button(onClick = {
+                if (usuario.value == "admin" && senha.value == "admin") {
+                    onLogin()
+                } else {
+                    context.toast("Usuário ou senha incorreto")
+                }
+            },
+                modifier = Modifier
+                    .padding(top = 20.dp)) {
+                Text(
+                    text = "Entrar",
+                    fontSize = 18.sp
+                )
             }
-        }) {
-            Text(
-                text = "Entrar",
-                fontSize = 18.sp
-            )
         }
 
-        Button(onClick = { onRegistro() }) {
-            Text(text = "Novo Usuário")
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Button(onClick = { onRegistro() },
+                modifier = Modifier
+                    .padding(top = 20.dp)) {
+                Text(text = "Novo Usuário")
+            }
         }
     }
 }
