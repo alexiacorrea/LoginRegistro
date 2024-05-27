@@ -85,14 +85,18 @@ fun Menu() {
 fun Home() {
     Column {
         Text(
-            text = "Usuário: Admin",
+            text = "HOME",
             textAlign = TextAlign.Center,
+            fontSize = 24.sp,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Text(
+            text = "Usuário: admin",
             fontSize = 18.sp,
             modifier = Modifier.fillMaxWidth()
         )
         Text(
             text = "E-mail: admin@gmail.com",
-            textAlign = TextAlign.Center,
             fontSize = 18.sp,
             modifier = Modifier.fillMaxWidth()
         )

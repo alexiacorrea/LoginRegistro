@@ -18,22 +18,22 @@ fun Sobre() {
             modifier = Modifier.fillMaxWidth()
         )
         Text(
-            text = "Nome: Alexia Correa",
+            text = "Nome: Alexia Correa.",
             fontSize = 18.sp,
             modifier = Modifier.fillMaxWidth()
         )
         Text(
-            text = "Idade: 22",
+            text = "Idade: 22 anos.",
             fontSize = 18.sp,
             modifier = Modifier.fillMaxWidth()
         )
         Text(
-            text = "Curso: Análise e Desenvolvimento de Sistemas",
+            text = "Curso: Análise e Desenvolvimento de Sistemas.",
             fontSize = 18.sp,
             modifier = Modifier.fillMaxWidth()
         )
         Text(
-            text = "Período: 5º Semestre",
+            text = "Período: 5º Semestre.",
             fontSize = 18.sp,
             modifier = Modifier.fillMaxWidth()
         )
