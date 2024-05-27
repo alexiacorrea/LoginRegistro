@@ -1,7 +1,7 @@
 package com.example.login.screens
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -18,6 +18,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.login.isSelected
@@ -37,8 +39,8 @@ fun Menu() {
 
             BottomNavigation {
                 BottomNavigationItem(
-                    selected = isSelected(currentDestination, "menu"),
-                    onClick = { navController.navigate("menu") },
+                    selected = isSelected(currentDestination, "home"),
+                    onClick = { navController.navigate("home") },
                     icon = {
                         Icon(imageVector = Icons.Filled.AccountBox, contentDescription = "")
                     })
@@ -61,67 +63,43 @@ fun Menu() {
     ) {
         Column(modifier = Modifier.padding(it)) {
 
-            Text(
-                text = "Menu",
-                textAlign = TextAlign.Center,
-                fontSize = 24.sp,
-                modifier = Modifier.fillMaxSize()
-            )
-        }
-    }
-
-    class SegundaAtividade : ComponentActivity() {
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            setContent {
-                LoginTheme {
-                    // A surface container using the 'background' color from the theme
-                    Surface(
-                        modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
-                    ) {
-                        Usuario()
-                    }
+            NavHost(navController = navController, startDestination = "home" ) {
+                composable("home") {
+                    Home()
                 }
-            }
-        }
-    }
-
-    @Composable
-    fun Usuario() {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = "Usuário: Alexia Correa",
-                fontSize = 22.sp,
-            )
-        }
-    }
-    class SegundaAtividade : ComponentActivity() {
-        override fun onCreate(savedInstanceState: Bundle?) {
-            super.onCreate(savedInstanceState)
-            setContent {
-                LoginTheme {
-                    // A surface container using the 'background' color from the theme
-                    Surface(
-                        modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background
-                    ) {
-                        Usuario()
-                    }
+                composable("viagem") {
+                    Viagem()
                 }
-            }
-        }
-    }
+                composable("sobre") {
+                    Sobre()
+                }
 
-    @Composable
-    fun Usuario() {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = "Usuário: Alexia Correa",
-                fontSize = 22.sp,
-            )
+            }
+
+
         }
     }
+}
+
+@Composable
+fun Home() {
+    Column {
+        Text(
+            text = "Usuário: Admin",
+            textAlign = TextAlign.Center,
+            fontSize = 18.sp,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Text(
+            text = "E-mail: admin@gmail.com",
+            textAlign = TextAlign.Center,
+            fontSize = 18.sp,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+    }
+}
+
 
 
 /*@Preview(showBackground = true)

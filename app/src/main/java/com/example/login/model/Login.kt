@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 
 data class Login(
-    var usuario: String = "",
-    var senha: String = ""
+    var usuario: String = "admin",
+    var senha: String = "admin"
 )
 
 @Composable
