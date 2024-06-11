@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Login</string>
+    <string name="application_nome">Nova Viagem</string>
     <string name="title_activity_segunda_atividade">SegundaAtividade</string>
 </resources>

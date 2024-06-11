@@ -66,12 +66,14 @@ fun BoaViagem() {
                 composable("registro") {
                     Registro( onBack = {
                         navController.navigate("login")
-                    })
-                }
+                    })}
+
+
             }
         }
     }
 }
+
 
 
 @Preview(showBackground = true)

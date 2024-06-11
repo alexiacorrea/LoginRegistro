@@ -68,10 +68,13 @@ fun Menu() {
                     Home()
                 }
                 composable("viagem") {
-                    Viagem()
+                    Viagem(navController)
                 }
                 composable("sobre") {
                     Sobre()
+                }
+                composable("formulario") {
+                    Formulario()
                 }
 
             }

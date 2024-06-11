@@ -3,10 +3,13 @@ package com.example.login.screens
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -22,25 +25,37 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.login.R
 import com.example.login.model.Viagem
 
+private fun isSelected (currentDestination: NavDestination?, route: String) : Boolean {
+    return currentDestination?.hierarchy?.any { it.route == route } == true
+}
 @Composable
-fun Viagem () {
+fun Viagem (navController: NavController) {
 
     val list = listOf (
-        Viagem (1, "Paris", "05/07/2024", "05/08/2024", 50000.0),
-        Viagem (2, "São Paulo", "05/06/2024", "09/06/2024", 3000.0),
-        Viagem (3, "Texas", "09/12/2024", "23/12/2024", 18000.0),
+        Viagem (1, "Lazer","Paris", "05/07/2024", "05/08/2024", 50000.0),
+        Viagem (2, "Negócio","São Paulo", "05/06/2024", "09/06/2024", 3000.0),
+        Viagem (3, "Lazer","Texas", "09/12/2024", "23/12/2024", 18000.0),
+        Viagem (4, "Negócio","Washington", "10/02/2025", "20/02/2025", 8000.0),
     )
     val ctx = LocalContext.current
 
+
     Scaffold (
         floatingActionButton = {
+            val navBackStackEntry = navController.currentBackStackEntryAsState()
+            val currentDestination = navBackStackEntry?.value?.destination
+
             FloatingActionButton(onClick = {
-                Toast.makeText(ctx,
-                    "Novo",
-                    Toast.LENGTH_SHORT).show()
+                navController.navigate("formulario")
             }) {
                 Icon(imageVector = Icons.Default.Add,
                     contentDescription = "")
@@ -93,15 +108,33 @@ fun ViagemCard (p: Viagem) {
     ) {
 
         Column (modifier = Modifier.padding(5.dp)) {
-            Text(text = p.destino,
-                style = MaterialTheme.typography.titleLarge)
-            Text(text = p.dataInicio,
-                style = MaterialTheme.typography.bodyMedium)
-            Text(text = p.dataFinal,
-                style = MaterialTheme.typography.bodyMedium)
-            Text(text = "R$ ${p.orcamento}",
-                style = MaterialTheme.typography.bodyMedium)
+            Row {
+                if (p.tipo == "Lazer")
+                    Image(
+                        painter = painterResource(id = R.drawable.lazer),
+                        contentDescription = "imagem lazer",
+                        modifier = Modifier
+                            .size(100.dp)
+                    )
+                else
+                    Image(
+                        painter = painterResource(id = R.drawable.negocio),
+                        contentDescription = "imagem negócio",
+                        modifier = Modifier
+                            .size(100.dp)
+                    )
+                Column (modifier = Modifier.padding(5.dp)) {
+                    Text(text = p.destino,
+                        style = MaterialTheme.typography.titleLarge)
+                    Text(text = p.dataInicio,
+                        style = MaterialTheme.typography.bodyMedium)
+                    Text(text = p.dataFinal,
+                        style = MaterialTheme.typography.bodyMedium)
+                    Text(text = "R$ ${p.orcamento}",
+                        style = MaterialTheme.typography.bodyMedium)
 
+                }
+            }
         }
 
     }
