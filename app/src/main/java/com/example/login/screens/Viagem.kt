@@ -32,7 +32,10 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.login.R
-import com.example.login.model.Viagem
+import com.example.login.entities.Viagem
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 private fun isSelected (currentDestination: NavDestination?, route: String) : Boolean {
     return currentDestination?.hierarchy?.any { it.route == route } == true
@@ -41,10 +44,8 @@ private fun isSelected (currentDestination: NavDestination?, route: String) : Bo
 fun Viagem (navController: NavController) {
 
     val list = listOf (
-        Viagem (1, "Lazer","Paris", "05/07/2024", "05/08/2024", 50000.0),
-        Viagem (2, "Negócio","São Paulo", "05/06/2024", "09/06/2024", 3000.0),
-        Viagem (3, "Lazer","Texas", "09/12/2024", "23/12/2024", 18000.0),
-        Viagem (4, "Negócio","Washington", "10/02/2025", "20/02/2025", 8000.0),
+        Viagem (1, "Paris", 0, LocalDate.now(), LocalDate.now(), 50000.0),
+        Viagem (2, "São Paulo", 1, LocalDate.now(), LocalDate.now(), 3000.0),
     )
     val ctx = LocalContext.current
 
@@ -109,7 +110,7 @@ fun ViagemCard (p: Viagem) {
 
         Column (modifier = Modifier.padding(5.dp)) {
             Row {
-                if (p.tipo == "Lazer")
+                if (p.tipo == 0)
                     Image(
                         painter = painterResource(id = R.drawable.lazer),
                         contentDescription = "imagem lazer",
@@ -123,12 +124,13 @@ fun ViagemCard (p: Viagem) {
                         modifier = Modifier
                             .size(100.dp)
                     )
+                var formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
                 Column (modifier = Modifier.padding(5.dp)) {
                     Text(text = p.destino,
                         style = MaterialTheme.typography.titleLarge)
-                    Text(text = p.dataInicio,
+                    Text(text = p.dataIni.format(formatter),
                         style = MaterialTheme.typography.bodyMedium)
-                    Text(text = p.dataFinal,
+                    Text(text = p.dataFim.format(formatter),
                         style = MaterialTheme.typography.bodyMedium)
                     Text(text = "R$ ${p.orcamento}",
                         style = MaterialTheme.typography.bodyMedium)
