@@ -28,4 +28,8 @@ interface UsuarioDao {
 
     @Delete
     fun delete(usuario: Usuario)
+
+    @Query("SELECT * FROM usuario WHERE user = :user AND senha = :senha LIMIT 1")
+    fun getUserByCredentials(user: String, senha: String): Flow<Usuario?>
+
 }

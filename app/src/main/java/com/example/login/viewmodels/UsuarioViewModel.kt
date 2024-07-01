@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.login.bd.AppDatabase
 import com.example.login.dao.UsuarioDao
 import com.example.login.entities.Usuario
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -67,4 +68,11 @@ class UsuarioViewModel(val usuarioDao: UsuarioDao): ViewModel() {
         save()
         new()
     }
+
+    fun findById() = usuarioDao.findById()
+
+    fun getUserByCredentials(user: String, senha: String): Flow<Usuario?> {
+        return usuarioDao.getUserByCredentials(user, senha)
+    }
+
 }

@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.util.Calendar
 
 class  ViagemViewModelFactory(val db: AppDatabase) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
@@ -81,4 +80,6 @@ class ViagemViewModel(val viagemDao: ViagemDao): ViewModel() {
         save()
         new()
     }
+
+    fun getAll() = viagemDao.getAll()
 }
