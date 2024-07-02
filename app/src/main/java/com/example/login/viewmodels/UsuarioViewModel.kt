@@ -7,6 +7,8 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.login.bd.AppDatabase
 import com.example.login.dao.UsuarioDao
 import com.example.login.entities.Usuario
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -69,10 +71,16 @@ class UsuarioViewModel(val usuarioDao: UsuarioDao): ViewModel() {
         new()
     }
 
-    fun findById() = usuarioDao.findById()
+    suspend fun findById(id: Long): Usuario? {
+        val deferred : Deferred<Usuario?> = viewModelScope.async {
+            usuarioDao.findById(id)
+        }
+        return deferred.await()
+    }
 
     fun getUserByCredentials(user: String, senha: String): Flow<Usuario?> {
         return usuarioDao.getUserByCredentials(user, senha)
     }
 
+    fun getAll() = usuarioDao.getAll()
 }

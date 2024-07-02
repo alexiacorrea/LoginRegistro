@@ -109,9 +109,9 @@ fun Home() {
             modifier = Modifier.fillMaxWidth()
         )
 
-        val usuarioItems = usuarioViewModel.findById().collectAsState(initial = emptyList())
+        val productItems = usuarioViewModel.getAll().collectAsState(initial = emptyList())
         LazyColumn() {
-            items(items = usuarioItems.value) {
+            items(items = productItems.value) {
                 Card {
                     Text(text = it.user)
                     Text(text = it.email)
@@ -131,4 +131,3 @@ fun PreviewMenu(){
 }
 *\
  */
-

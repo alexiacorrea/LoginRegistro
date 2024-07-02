@@ -42,7 +42,7 @@ import com.example.login.viewmodels.UsuarioViewModelFactory
 @Composable
 fun Login(
     onLogin: () -> Unit,
-    onRegistro: () -> Unit
+    onRegistro: () -> Unit,
 ) {
     val context = LocalContext.current
 

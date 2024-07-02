@@ -24,12 +24,11 @@ interface UsuarioDao {
     fun getAll(): Flow<List<Usuario>>
 
     @Query("select * from usuario p where p.id = :id")
-    fun findById(id: Long): Usuario?
+    suspend fun findById(id: Long): Usuario?
 
     @Delete
     fun delete(usuario: Usuario)
 
     @Query("SELECT * FROM usuario WHERE user = :user AND senha = :senha LIMIT 1")
     fun getUserByCredentials(user: String, senha: String): Flow<Usuario?>
-
 }

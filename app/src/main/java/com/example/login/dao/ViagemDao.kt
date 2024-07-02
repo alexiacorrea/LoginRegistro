@@ -20,7 +20,7 @@ interface ViagemDao {
     @Upsert
     suspend fun upsert (viagem: Viagem): Long
 
-    @Query ("select * from viagem p order by p.destino")
+    @Query ("select * from viagem p order by p.dataIni")
     fun getAll(): Flow<List<Viagem>>
 
     @Query("select * from viagem p where p.id = :id")

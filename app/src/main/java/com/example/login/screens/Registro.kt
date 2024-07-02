@@ -148,14 +148,7 @@ fun Registro(onBack: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            Button(onClick = {
-                usuarioViewModel.save()
-                Toast.makeText(ctx, "Usuário salvo",
-                    Toast.LENGTH_SHORT).show()
-            }) {
-                Text(text = "Salvar")
-            }
-            Button(onClick = {
+            Button(onClick = { onBack()
                 usuarioViewModel.savenew()
                 Toast.makeText(ctx, "Usuário salvo",
                     Toast.LENGTH_SHORT).show()

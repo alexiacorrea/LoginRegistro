@@ -299,10 +299,10 @@ fun Formulario() {
             ){
                 Button(onClick = {
                     viagemViewModel.save()
-                    Toast.makeText(ctx, "Viagem salva",
+                    Toast.makeText(ctx, "Viagem editada",
                         Toast.LENGTH_SHORT).show()
                 }) {
-                    Text(text = "Salvar")
+                    Text(text = "Editar")
                 }
                 Button(onClick = {
                     viagemViewModel.savenew()
