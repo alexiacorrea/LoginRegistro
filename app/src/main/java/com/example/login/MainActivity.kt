@@ -10,8 +10,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,6 +18,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.login.components.MyTopBar
 import com.example.login.screens.Login
 import com.example.login.screens.Menu
 import com.example.login.screens.Registro
@@ -53,12 +52,10 @@ fun BoaViagem() {
     val navController = rememberNavController()
 
     Scaffold (
-        topBar = {
-            TopAppBar(title = {
-                Text(text = "Room Database")
-            })
-        }
-    ){
+            topBar = {
+                MyTopBar()
+            }
+            ){
         Column (modifier = Modifier.padding(it)){
 
             NavHost(navController = navController, startDestination = "login") {
