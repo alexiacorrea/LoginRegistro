@@ -169,7 +169,7 @@ fun Formulario(onBack:()-> Unit, id: Long?) {
                     textAlign = TextAlign.Left,
                     modifier = Modifier
                         .weight(1.5f)
-                        .padding(top = 16.dp)
+                        .padding(top = 14.dp)
                 )
             }
 
@@ -220,7 +220,7 @@ fun Formulario(onBack:()-> Unit, id: Long?) {
                     textAlign = TextAlign.Left,
                     modifier = Modifier
                         .weight(1.5f)
-                        .padding(top = 16.dp)
+                        .padding(top = 14.dp)
                 )
             }
 
@@ -271,7 +271,7 @@ fun Formulario(onBack:()-> Unit, id: Long?) {
                     textAlign = TextAlign.Left,
                     modifier = Modifier
                         .weight(1.5f)
-                        .padding(top = 16.dp)
+                        .padding(top = 14.dp)
                 )
             }
 
@@ -298,7 +298,7 @@ fun Formulario(onBack:()-> Unit, id: Long?) {
                     Toast.makeText(ctx, "Viagem salva",
                         Toast.LENGTH_SHORT).show()
                 }) {
-                    Text(text = "Salvar Nova")
+                    Text(text = "Salvar Viagem")
                 }
             }
         }

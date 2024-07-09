@@ -34,35 +34,35 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    BoaViagem()
+                    BoaViagem(activity = this@MainActivity)
                 }
             }
         }
     }
 }
 
-fun isSelected (currentDestination: NavDestination?, route: String) : Boolean {
+fun isSelected(currentDestination: NavDestination?, route: String): Boolean {
     return currentDestination?.hierarchy?.any { it.route == route } == true
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BoaViagem() {
+fun BoaViagem(activity: ComponentActivity) {
 
     val navController = rememberNavController()
 
-    Scaffold (
-            topBar = {
-                MyTopBar()
-            }
-            ){
-        Column (modifier = Modifier.padding(it)){
+    Scaffold(
+        topBar = {
+            MyTopBar(onClose = { activity.finishAffinity() })
+        }
+    ) {
+        Column(modifier = Modifier.padding(it)) {
 
             NavHost(navController = navController, startDestination = "login") {
                 composable("login") {
                     Login(onLogin = {
-                        navController.navigate("menu")},
-                        onRegistro = {
+                        navController.navigate("menu")
+                    }, onRegistro = {
                         navController.navigate("registro")
                     })
                 }
@@ -70,45 +70,19 @@ fun BoaViagem() {
                     Menu()
                 }
                 composable("registro") {
-                    Registro( onBack = {
+                    Registro(onBack = {
                         navController.navigate("login")
-                    })}
-
-
+                    })
+                }
             }
         }
     }
 }
 
-
-
 @Preview(showBackground = true)
 @Composable
 fun BoaViagemPreview() {
     LoginTheme {
-        BoaViagem()
+        BoaViagem(activity = MainActivity())
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

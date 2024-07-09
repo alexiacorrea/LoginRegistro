@@ -1,8 +1,7 @@
 package com.example.login.components
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -14,10 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.example.login.R
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyTopBar() {
+fun MyTopBar(onClose: () -> Unit) {
     TopAppBar(
         title = {
             Text(text = stringResource(R.string.application_nome))
@@ -29,18 +27,11 @@ fun MyTopBar() {
             actionIconContentColor = MaterialTheme.colorScheme.onPrimary
         ),
         navigationIcon = {
-            IconButton(onClick = {  }) {
-                Icon(
-                    imageVector = Icons.Filled.Home,
-                    contentDescription = null
-                )
-
-            }
         },
         actions = {
-            IconButton(onClick = {  }) {
+            IconButton(onClick = { onClose() }) {
                 Icon(
-                    imageVector = Icons.Filled.Info,
+                    imageVector = Icons.Filled.Close,
                     contentDescription = null
                 )
             }
