@@ -1,6 +1,5 @@
 package com.example.login.screens
 
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -29,10 +28,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.login.R
 import com.example.login.bd.AppDatabase
 import com.example.login.entities.Viagem
@@ -40,11 +42,15 @@ import com.example.login.viewmodels.ViagemViewModel
 import com.example.login.viewmodels.ViagemViewModelFactory
 import java.time.format.DateTimeFormatter
 
+@Composable
+fun dest(){
+
+}
 private fun isSelected (currentDestination: NavDestination?, route: String) : Boolean {
     return currentDestination?.hierarchy?.any { it.route == route } == true
 }
 @Composable
-fun Viagem (navController: NavController) {
+fun Viagem () {
 
     val ctx = LocalContext.current
     val db = AppDatabase.getDatabase(ctx)
@@ -53,26 +59,57 @@ fun Viagem (navController: NavController) {
         factory = ViagemViewModelFactory(db)
     )
 
+    val navController = rememberNavController()
+
     val viagensItems = viagemViewModel.getAll().collectAsState(initial = emptyList())
 
 
     Scaffold (
         floatingActionButton = {
-            val navBackStackEntry = navController.currentBackStackEntryAsState()
-            val currentDestination = navBackStackEntry?.value?.destination
 
             FloatingActionButton(onClick = {
-                navController.navigate("formulario")
+                navController.navigate("formulario/${-1L}")
             }) {
                 Icon(imageVector = Icons.Default.Add,
                     contentDescription = "")
             }
         }
     ) {
+
+
         Column (modifier = Modifier.padding(it)) {
+
+            NavHost(
+                navController = navController,
+                startDestination = "dest"){
+
+                composable("dest"){
+                    dest()
+                }
+
+                composable("formulario/{viagemId}", arguments = listOf(navArgument("viagemId"){
+                    type = NavType.LongType ; defaultValue = -1L})){
+                    entry -> entry.arguments?.getLong("viagemId").let { it
+                        Formulario(
+                            onBack = {navController.navigateUp()}, it
+                        )
+                    }
+                }
+            }
+
             LazyColumn(){
+
                 items( items = viagensItems.value) {
-                    ViagemCard (it)
+                    ViagemCard (
+                        p = it,
+                        onDelet = {
+                            viagemViewModel.delet(it)
+                        },
+                        onEdit = {
+                            navController.navigate("formulario/${it.id}")
+                        }
+                    )
+
 
                 }
             }
@@ -83,7 +120,7 @@ fun Viagem (navController: NavController) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ViagemCard (p: Viagem) {
+fun ViagemCard (p: Viagem, onDelet : () -> Unit, onEdit : () -> Unit) {
 
         val ctx = LocalContext.current
 
@@ -96,22 +133,27 @@ fun ViagemCard (p: Viagem) {
                 .fillMaxWidth()
                 .combinedClickable(
                     onClick = {
-                        Toast
-                            .makeText(
-                                ctx,
-                                "Viagem: ${p.destino}",
-                                Toast.LENGTH_SHORT
-                            )
-                            .show()
+
+                        onEdit()
+//                        Toast
+//                            .makeText(
+//                                ctx,
+//                                "Viagem: ${p.destino}",
+//                                Toast.LENGTH_SHORT
+//                            )
+//                            .show()
                     },
                     onLongClick = {
-                        Toast
-                            .makeText(
-                                ctx,
-                                "Viagem: ${p.destino}",
-                                Toast.LENGTH_SHORT
-                            )
-                            .show()
+
+                        onDelet()
+
+//                        Toast
+//                            .makeText(
+//                                ctx,
+//                                "Viagem: ${p.destino}",
+//                                Toast.LENGTH_SHORT
+//                            )
+//                            .show()
                     }
                 )
         ) {
@@ -157,7 +199,5 @@ fun ViagemCard (p: Viagem) {
                     }
                 }
             }
-
-
-    }
-}
+        }
+     }

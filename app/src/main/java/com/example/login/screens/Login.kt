@@ -64,7 +64,8 @@ fun Login(
             painter = painterResource(id = R.drawable.login),
             contentDescription = "imagem login",
             modifier = Modifier
-                .size(360.dp)
+                .size(250.dp)
+                .align(Alignment.CenterHorizontally)
         )
 
         Text(

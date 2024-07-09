@@ -7,12 +7,13 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.login.bd.AppDatabase
 import com.example.login.dao.ViagemDao
 import com.example.login.entities.Viagem
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 
 class  ViagemViewModelFactory(val db: AppDatabase) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
@@ -37,13 +38,13 @@ class ViagemViewModel(val viagemDao: ViagemDao): ViewModel() {
         }
     }
 
-    fun updateDataIni (dataIni: LocalDate) {
+    fun updateDataIni (dataIni: String) {
         _uiState.update {
             it.copy(dataIni = dataIni)
         }
     }
 
-    fun updateDataFim (dataFim: LocalDate) {
+    fun updateDataFim (dataFim: String) {
         _uiState.update {
             it.copy(dataFim = dataFim)
         }
@@ -63,7 +64,7 @@ class ViagemViewModel(val viagemDao: ViagemDao): ViewModel() {
 
     private fun new() {
         _uiState.update {
-            it.copy(id = 0, destino = "", tipo = 0, dataIni = LocalDate.now(), dataFim = LocalDate.now(), orcamento = 0.0)
+            it.copy(id = 0, destino = "", tipo = 0, dataIni = "", dataFim = "", orcamento = 0.0)
         }
     }
 
@@ -82,4 +83,28 @@ class ViagemViewModel(val viagemDao: ViagemDao): ViewModel() {
     }
 
     fun getAll() = viagemDao.getAll()
+
+    fun delet(viagem: Viagem){
+        viewModelScope.launch {
+            viagemDao.delete(viagem)
+        }
+    }
+
+    suspend fun findById(id: Long): Viagem? {
+        val deferred : Deferred<Viagem?> = viewModelScope.async {
+            viagemDao.findById(id)
+        }
+        return deferred.await()
+    }
+
+    fun setUiState(viagem: Viagem) {
+        _uiState.value = uiState.value.copy(
+            id = viagem.id,
+            destino = viagem.destino,
+            dataIni = viagem.dataIni,
+            dataFim = viagem.dataFim,
+            tipo = viagem.tipo,
+            orcamento = viagem.orcamento
+        )
+    }
 }

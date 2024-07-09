@@ -18,6 +18,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,34 +32,35 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.login.bd.AppDatabase
-import com.example.login.components.MyTopBar
 import com.example.login.viewmodels.ViagemViewModel
 import com.example.login.viewmodels.ViagemViewModelFactory
 import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Formulario() {
-
-    val ctx = LocalContext.current
-    val db = AppDatabase.getDatabase(ctx)
-
-    val viagemViewModel: ViagemViewModel = viewModel(
-        factory = ViagemViewModelFactory(db)
-    )
-    val state = viagemViewModel.uiState.collectAsState()
+fun Formulario(onBack:()-> Unit, id: Long?) {
 
     Scaffold(
-        topBar = {
-            MyTopBar()
-        }
     ){
+
+        val ctx = LocalContext.current
+        val db = AppDatabase.getDatabase(ctx)
+
+        val viagemViewModel: ViagemViewModel = viewModel(
+            factory = ViagemViewModelFactory(db)
+        )
+
+        LaunchedEffect(id){
+            if (id != null){
+                val viagem = viagemViewModel.findById(id)
+                viagem?.let { viagemViewModel.setUiState(it) }
+            }
+        }
+
+        val state = viagemViewModel.uiState.collectAsState()
 
         val snackbarHostState = remember { SnackbarHostState() }
         val coroutineScope = rememberCoroutineScope()
@@ -67,13 +69,14 @@ fun Formulario() {
             hostState = snackbarHostState
         ) {}
 
-        val showDatePickerDialogIni = remember {
+
+        val showDatePickerDialogInicio = remember {
             mutableStateOf(false)
         }
         val selectedDateIni = remember {
             mutableStateOf("")
         }
-        val datePickerStateIni = rememberDatePickerState()
+        val datePickerStateInicio = rememberDatePickerState()
 
 
 
@@ -172,22 +175,17 @@ fun Formulario() {
 
             Row {
 
-                if (showDatePickerDialogIni.value) {
+                if (showDatePickerDialogInicio.value) {
                     DatePickerDialog(
-                        onDismissRequest = { showDatePickerDialogIni.value = false },
+                        onDismissRequest = { showDatePickerDialogInicio.value = false },
                         confirmButton = {
                             Button(
                                 onClick = {
-                                    datePickerStateIni
+                                    datePickerStateInicio
                                         .selectedDateMillis?.let { millis ->
-                                            selectedDateIni.value = millis.toBrazilianDateFormat()
+                                            viagemViewModel.updateDataIni(millis.toBrazilianDateFormat())
                                         }
-                                    ///
-                                    val instant = Instant.ofEpochMilli(datePickerStateIni.selectedDateMillis?:0)
-                                    val date = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
-                                    viagemViewModel.updateDataIni(date.toLocalDate())
-
-                                    showDatePickerDialogIni.value = false
+                                    showDatePickerDialogInicio.value = false
                                 }) {
                                 Text(text = "Escolher data")
                             }
@@ -195,19 +193,19 @@ fun Formulario() {
                         modifier = Modifier
                             .weight(4f)
                     ) {
-                        DatePicker(state = datePickerStateIni)
+                        DatePicker(state = datePickerStateInicio)
                     }
                 }
 
                 OutlinedTextField(
-                    value = selectedDateIni.value,
-                    onValueChange = { },
+                    value = state.value.dataIni,
+                    onValueChange = {viagemViewModel.updateDataIni(it)},
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth()
                         .onFocusChanged {
                             if (it.isFocused) {
-                                showDatePickerDialogIni.value = true
+                                showDatePickerDialogInicio.value = true
                             }
                         },
                     readOnly = true
@@ -236,12 +234,8 @@ fun Formulario() {
                                 onClick = {
                                     datePickerStateFim
                                         .selectedDateMillis?.let { millis ->
-                                            selectedDateFim.value = millis.toBrazilianDateFormat()
+                                            viagemViewModel.updateDataFim(millis.toBrazilianDateFormat())
                                         }
-                                    val instant = Instant.ofEpochMilli(datePickerStateFim.selectedDateMillis?:0)
-                                    val date = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
-                                    viagemViewModel.updateDataFim(date.toLocalDate())
-
                                     showDatePickerDialogFim.value = false
                                 }) {
                                 Text(text = "Escolher data")
@@ -255,8 +249,8 @@ fun Formulario() {
                 }
 
                 OutlinedTextField(
-                    value = selectedDateFim.value,
-                    onValueChange = { },
+                    value = state.value.dataFim,
+                    onValueChange = {viagemViewModel.updateDataFim(it)},
                     modifier = Modifier
                         .padding(8.dp)
                         .fillMaxWidth()
@@ -297,15 +291,10 @@ fun Formulario() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ){
-                Button(onClick = {
-                    viagemViewModel.save()
-                    Toast.makeText(ctx, "Viagem editada",
-                        Toast.LENGTH_SHORT).show()
-                }) {
-                    Text(text = "Editar")
-                }
+
                 Button(onClick = {
                     viagemViewModel.savenew()
+                    onBack()
                     Toast.makeText(ctx, "Viagem salva",
                         Toast.LENGTH_SHORT).show()
                 }) {

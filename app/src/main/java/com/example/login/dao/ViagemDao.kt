@@ -24,8 +24,8 @@ interface ViagemDao {
     fun getAll(): Flow<List<Viagem>>
 
     @Query("select * from viagem p where p.id = :id")
-    fun findById(id: Long): Viagem?
+    suspend fun findById(id: Long): Viagem?
 
     @Delete
-    fun delete(product: Viagem)
+    suspend fun delete(product: Viagem)
 }
